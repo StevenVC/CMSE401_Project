@@ -1,0 +1,26 @@
+#!/bin/bash
+
+fname_sol="../temp_results/alg_sol.txt"
+fname_g_hist="../temp_results/g_best_hist.txt"
+fname_log="../temp_results/log.txt"
+
+# rm $fname_log
+
+num_particles=1000
+iter_max=100
+pert_rate=0.3
+stop_cond=0
+n_samples=100
+n_threads=1
+desired_acc=1E-6
+
+g++ -O3 -fopenmp -o optimizer_parallel.exe ../src/optimizer_parallel.cpp
+for i in {1..100}
+do
+for i in 1 2 4 6 8 10 12 14 16
+do
+./optimizer_parallel.exe $num_particles $iter_max $pert_rate $stop_cond $fname_sol $fname_g_hist $i $desired_acc $fname_log
+done
+done
+
+rm optimizer_parallel.exe

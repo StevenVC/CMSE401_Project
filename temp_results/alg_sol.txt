@@ -1,0 +1,19 @@
+The global best solution acoss 100 iterations was the following: 
+1.57109, -0.153736, 3.3081, 0.00190467, 1.55912, -8.2792e-05, 
+This solution had a fitness value of 1.01659e-11
+
+The algorithm attained an accuracy of 1e-06 in 0.04734 [s]
+
+The desired position of the end effector is the following:
+0, 525, 890, 
+
+The best pso solution resulted in an end effector position of:
+-0.000181612, 525, 890, 
+
+The desired rotation matrix of the end effector is the following:
+0, 1, 
+0, 0, 
+
+The best pso solution resulted in an end effector rotation of:
+6.02303e-05, 0.999999, 
+0.00109173, -0.00161405, 

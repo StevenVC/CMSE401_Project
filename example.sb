@@ -1,0 +1,47 @@
+#!/bin/bash
+
+ex_res="example_results/"
+
+rm -r $ex_res
+mkdir $ex_res
+
+# set location to save results to
+fname_sol=$ex_res"alg_sol"
+fname_g_hist=$ex_res"g_best_hist"
+fname_log=$ex_res"log"
+
+# remove previous results
+# this can be safely removed
+rm $fname_sol
+rm $fname_g_hist
+rm $fname_log
+
+# set optimization parameters
+# !!! all of these except "stop_cond" can be safely changed !!!
+# limits are unknown
+num_particles=2000 # number of particles in the point swarm
+iter_max=100 # maximum number of iterations to take
+pert_rate=0.3 # perturbation rate of the particle velocities
+stop_cond=0 # !!MAY RESULT IN A RACE CONDITION!! changes whether the algorithm stops based on iterations or accuracy
+desired_acc=1E-6 # desired accuracy of the inverse kinematics solution
+
+# compile the program
+g++ -O3 -fopenmp -o optimizer_parallel.exe src/optimizer_parallel.cpp
+
+# run the program with i number of threads
+# this can be safely changed
+for i in 1 2 4 6 8 10 12 14 16
+do
+fname_sol=$fname_sol"_"$i".txt"
+fname_g_hist=$fname_g_hist"_"$i".txt"
+fname_log=$fname_log"_"$i".txt"
+
+./optimizer_parallel.exe $num_particles $iter_max $pert_rate $stop_cond $fname_sol $fname_g_hist $i $desired_acc $fname_log
+
+fname_sol=$ex_res"alg_sol"
+fname_g_hist=$ex_res"g_best_hist"
+fname_log=$ex_res"log"
+done
+
+# remove the executable file
+rm optimizer_parallel.exe

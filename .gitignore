@@ -1,0 +1,8 @@
+.ipynb_checkpoints
+__pycache__
+
+*.exe
+*.ods
+
+example_results/
+mess/

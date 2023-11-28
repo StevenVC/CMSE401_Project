@@ -1,0 +1,45 @@
+#!/bin/bash
+
+fname_sol="results/alg_sol_parallel.txt"
+fname_g_hist="results/g_best_hist_parallel.txt"
+
+g++ -O3 -fopenmp -o optimizer_parallel.exe optimizer_parallel.cpp
+
+outfile_name="results/optimal_timing.txt"
+rm $outfile_name
+
+num_particles=1000
+iter_max=100
+pert_rate=0.3
+stop_cond=0
+n_samples=100
+
+echo "Timing study of parallel code with the following parameters:
+      n_particles=$num_particles, iter_max=$iter_max, pert_rate=$pert_rate, stop_cond=$stop_cond
+
+      Each Row Corresponds to the following number of threads:
+      [1, 2, 4, 6, 8, 10, 12, 14, 16]
+      " >> $outfile_name
+
+for((j=0; j<n_samples; j++))
+do
+    for i in 1 2 4 6 8 10 12 14 16
+    do
+    \time -o "temp$j.txt" -a -f "%e" ./optimizer_parallel.exe $num_particles $iter_max $pert_rate $stop_cond $fname_sol $fname_g_hist $i
+    done
+done
+
+for f in temp*.txt;
+do
+temp=""
+
+    for l in $(cat $f);
+    do
+    temp+="$l, "
+    done
+
+echo $temp >> $outfile_name
+done
+
+rm temp*.txt
+rm optimizer_parallel.exe
